@@ -1,0 +1,38 @@
+
+
+<main class="main">
+  <tfs-table [tableData]="tableData" [expandable]="true" [selectable]="true" [columns]="columns"
+    [sortableColumns]="['name', 'weight']">
+
+    <ng-template appTfsCell [columnName]="'name'" let-element>
+      <span style="color: blue">{{ element.name }}</span>
+    </ng-template>
+
+    <!-- Custom cell for 'weight' column -->
+    <ng-template appTfsCell [columnName]="'weight'" let-element>
+      <span style="color: red">{{ element.weight }}</span>
+    </ng-template>
+
+      <!-- Custom cell for 'symbol' column -->
+    <ng-template appTfsCell [columnName]="'symbol'" let-element>
+      <span style="color: red">{{ element.symbol }}</span>
+    </ng-template>
+
+
+      <ng-template appTfsCell [columnName]="'position'" let-element>
+      <span style="color: red">{{ element.position }}</span>
+    </ng-template>
+
+
+    <ng-template #expandedRow let-element>
+      <app-random-component></app-random-component>
+    </ng-template>
+
+
+  </tfs-table>
+
+</main>
+
+
+
+<router-outlet />

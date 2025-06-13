@@ -1,0 +1,66 @@
+<table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort class="mat-elevation-z8">
+
+  @for (column of columns(); track column) {
+
+  <ng-container matColumnDef="{{column}}">
+    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="column" [disabled]="isSortableColumn(column)">{{column}}</th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="getCellTemplate(column)" [ngTemplateOutlet]="getCellTemplate(column)"
+        [ngTemplateOutletContext]="{ $implicit: element }">
+      </ng-container>
+
+    </td>
+  </ng-container>
+
+  }
+
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
+        [indeterminate]="selection.hasValue() && !isAllSelected()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+        [checked]="selection.isSelected(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button aria-label="expand row" (click)="expandRow(element); $event.stopPropagation()"
+        class="example-toggle-button" [class.example-toggle-button-expanded]="isExpanded(element)">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="totalColumns().length">
+      <div class="example-element-detail-wrapper" [class.example-element-detail-wrapper-expanded]="isExpanded(element)">
+        <div class="example-element-detail">
+          <ng-container *ngTemplateOutlet="expandedRowTemplate; context: { $implicit: element }">
+          </ng-container>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+  <th mat-header-cell *matHeaderCellDef></th>
+  <td mat-cell *matCellDef="let element">
+    <ng-container *ngTemplateOutlet="actionsTemplate; context: { $implicit: element }"></ng-container>
+  </td>
+</ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="totalColumns()"></tr>
+  <tr mat-row *matRowDef="let element; columns: totalColumns();" class="example-element-row"
+    [class.example-expanded-row]="isExpanded(element)" (click)="expandRow(element)">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+</table>
+
+
