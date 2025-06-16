@@ -21,6 +21,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
 import { TfsCellDirective } from './tfs-cell.directive';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 /**
  * @title Table with expandable rows
@@ -36,6 +37,7 @@ import { TfsCellDirective } from './tfs-cell.directive';
     MatCheckbox,
     MatSortModule,
     CommonModule,
+    MatPaginatorModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -58,6 +60,7 @@ export class tableComponent<T = any>
 
   // table features
   sort = viewChild<MatSort>(MatSort);
+  paginator = viewChild<MatPaginator>(MatPaginator);
   expandedElement: T | null | undefined;
   expandedContent = contentChild(TemplateRef);
   selection = new SelectionModel<T>(true, []);
@@ -83,6 +86,8 @@ export class tableComponent<T = any>
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort()!;
+    this.dataSource.paginator = this.paginator()!;
+
   }
 
   ngAfterContentInit(): void {
